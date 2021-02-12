@@ -6,6 +6,12 @@ def getSortedProjects(projects) {
     return projects.sort { it.order }
 }
 
+def printNiceHeader(str) {
+	println "+${''.center(30, '-')}+"
+	println "|${''.center(30, ' ')}|"
+	println "+${''.center(30, '-')}+"
+}
+
 node {
 	def currentPath = pwd()
 	File file = new File("${currentPath}\\jenkinsParams.json")
@@ -13,9 +19,8 @@ node {
 	def jsonText = file.getText()
 	def params = slurper.parseText(jsonText)
 	
-	println "Loaded JSON"
+	printNiceHeader('Loaded JSON')
 	println JsonOutput.prettyPrint(jsonText)
-	println params
 
 	def pathTemplate = params.pathTemplates.default
 	def sortedProjectNames = getSortedProjects(params.projects)
