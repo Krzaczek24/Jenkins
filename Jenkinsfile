@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 
 @NonCPS
 def getSortedProjects(projects) {
@@ -13,7 +14,7 @@ node {
 	def json = slurper.parseText(jsonText)
 	
 	println "Loaded JSON"
-	println json
+	println JsonOutput.prettyPrint(json)
 
 	def sortedProjectNames = getSortedProjects(json.projects)
 	def pathTemplate = json.pathTemplates.default
@@ -25,7 +26,7 @@ node {
 	def selectedProjects = Projects.tokenize(',')
 
 	for (projectName in allProjectNames) {
-		projectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
+		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 	}
 
     checkout scm
@@ -36,7 +37,7 @@ node {
     
     stage('Restore packages') {
         if (Restore == true) {
-            for (project in projectsData) {
+            for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Restoring packages for '${project.name}' project ... "
 					bat "${dotNetPath} restore ${project.path}"
@@ -53,7 +54,7 @@ node {
     
     stage('Clean') {
         if (Clean == true) {
-	        for (project in projectsData) {
+	        for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Cleaning for '${project.name}' project ... "
 					bat "${dotNetPath} clean ${project.path}"
@@ -68,7 +69,7 @@ node {
 		}
     }
     
-	for (project in projectsData) {
+	for (project in allProjectsData) {
 		stage("Build '${project.name}'") {
 			if (selectedProjects.contains(project)) {
 				println "Building '${project.name}' project ... "
@@ -90,7 +91,7 @@ node {
 		//bat "${dotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
     }
 	
-	for (project in projectsData) {
+	for (project in allProjectsData) {
 		stage("Publish '${project.name}'") {
 			if (selectedProjects.contains(project)) {
 				println "Publishing '${project.name}' project ... "
