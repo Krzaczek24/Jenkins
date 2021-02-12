@@ -1,6 +1,6 @@
 import groovy.json.JsonSlurper
 
-File file = new File("$WORKSPACE\\jenkinsParams.json")
+File file = new File("${env.WORKSPACE}\\jenkinsParams.json")
 def slurper = new JsonSlurper()
 def jsonText = file.getText()
 def json = slurper.parseText(jsonText)
