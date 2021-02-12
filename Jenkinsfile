@@ -1,25 +1,25 @@
 import groovy.json.JsonSlurper
 
-def currentPath = pwd()
-File file = new File("${currentPath}\\jenkinsParams.json")
-def slurper = new JsonSlurper()
-def jsonText = file.getText()
-def json = slurper.parseText(jsonText)
-
-def sortedProjectNames = json.projects.sort { it.order }
-def pathTemplate = json.pathTemplates.default
-def allProjectNames = sortedProjectNames*.name
-def gitPath = json.gitPath
-def dotNetPath = json.dotNetPath
-
-def allProjectsData = []
-def selectedProjects = Projects.tokenize(',')
-
-for (projectName in allProjectNames) {
-    projectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
-}
-
 node {
+	def currentPath = pwd()
+	File file = new File("${currentPath}\\jenkinsParams.json")
+	def slurper = new JsonSlurper()
+	def jsonText = file.getText()
+	def json = slurper.parseText(jsonText)
+
+	def sortedProjectNames = json.projects.sort { it.order }
+	def pathTemplate = json.pathTemplates.default
+	def allProjectNames = sortedProjectNames*.name
+	def gitPath = json.gitPath
+	def dotNetPath = json.dotNetPath
+
+	def allProjectsData = []
+	def selectedProjects = Projects.tokenize(',')
+
+	for (projectName in allProjectNames) {
+		projectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
+	}
+
     checkout scm
     
     stage('Checkout') {
