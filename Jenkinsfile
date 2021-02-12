@@ -15,7 +15,7 @@ node {
 	//File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
 	//def jsonText = file.getText()
-	def jsonText = '{"gitPath": "https://github.com/Krzaczek24/BlazorApplication.git","dotNetPath": "\\"C:\\Program Files\\dotnet\\dotnet.exe\\"',"pathTemplates": {"default": "DynamicManager\\__project__\\DynamicManager.__project__.csproj"},"projects": [{"name": "Client","order": 4,"pathTemplate": "default"},{"name": "Database","order": 1,"pathTemplate": "default"},{"name": "Server","order": 3,"pathTemplate": "default"},{"name": "Shared","order": 2,"pathTemplate": "default"}]}'
+	def jsonText = '{"gitPath": "https://github.com/Krzaczek24/BlazorApplication.git","dotNetPath": "\\"C:\\Program Files\\dotnet\\dotnet.exe\\"","pathTemplates": {"default": "DynamicManager\\__project__\\DynamicManager.__project__.csproj"},"projects": [{"name": "Client","order": 4,"pathTemplate": "default"},{"name": "Database","order": 1,"pathTemplate": "default"},{"name": "Server","order": 3,"pathTemplate": "default"},{"name": "Shared","order": 2,"pathTemplate": "default"}]}'
 	def params = slurper.parseText(jsonText)
 	
 	printNiceHeader('Loaded JSON')
