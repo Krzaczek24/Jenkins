@@ -11,16 +11,16 @@ node {
 	File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
 	def jsonText = file.getText()
-	def json = slurper.parseText(jsonText)
+	def params = slurper.parseText(jsonText)
 	
 	println "Loaded JSON"
-	println JsonOutput.prettyPrint(json)
+	println JsonOutput.prettyPrint(jsonText)
 
-	def sortedProjectNames = getSortedProjects(json.projects)
-	def pathTemplate = json.pathTemplates.default
+	def sortedProjectNames = getSortedProjects(params.projects)
+	def pathTemplate = params.pathTemplates.default
 	def allProjectNames = sortedProjectNames*.name
-	def gitPath = json.gitPath
-	def dotNetPath = json.dotNetPath
+	def gitPath = params.gitPath
+	def dotNetPath = params.dotNetPath
 
 	def allProjectsData = []
 	def selectedProjects = Projects.tokenize(',')
