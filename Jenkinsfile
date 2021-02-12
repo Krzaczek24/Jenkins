@@ -2,7 +2,9 @@ import groovy.json.JsonSlurper
 
 node {
 	def currentPath = pwd()
+	println "########################"
 	println currentPath
+	println "########################"
 	File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
 	def jsonText = file.getText()
