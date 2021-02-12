@@ -28,19 +28,35 @@ node {
     stage('Restore packages') {
         if (Restore == true) {
             for (project in projectsData) {
-                println "Restoring packages for '${project.name}' project ... "
-                bat "${dotNetPath} restore ${project.path}"
+				if (selectedProjects.contains(project)) {
+					println "Restoring packages for '${project.name}' project ... "
+					bat "${dotNetPath} restore ${project.path}"
+				}
+				else {
+					println "Skipped restoring packages for '${project.name}' project"
+				}
             }
         }
+		else {
+			println "Skipped restoring packages for all projects
+		}
     }
     
     stage('Clean') {
         if (Clean == true) {
 	        for (project in projectsData) {
-                println "Cleaning for '${project.name}' project ... "
-                bat "${dotNetPath} clean ${project.path}"
+				if (selectedProjects.contains(project)) {
+					println "Cleaning for '${project.name}' project ... "
+					bat "${dotNetPath} clean ${project.path}"
+				}
+				else {
+					println "Skipped cleaning '${project.name}' project"
+				}
             }   
 	    }
+		else {
+			println "Skipped cleaning all projects"
+		}
     }
     
 	for (project in projectsData) {
