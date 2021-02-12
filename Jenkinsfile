@@ -1,5 +1,10 @@
 import groovy.json.JsonSlurper
 
+@NonCPS
+def getSortedProjects(projects) {
+    return projects.sort { it.order }
+}
+
 node {
 	def currentPath = pwd()
 	File file = new File("${currentPath}\\jenkinsParams.json")
@@ -10,7 +15,7 @@ node {
 	println "Loaded JSON"
 	println json
 
-	def sortedProjectNames = json.projects.sort { it.order }
+	def sortedProjectNames = getSortedProjects(json.projects)
 	def pathTemplate = json.pathTemplates.default
 	def allProjectNames = sortedProjectNames*.name
 	def gitPath = json.gitPath
