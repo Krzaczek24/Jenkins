@@ -7,9 +7,7 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "+${''.center(30, '-')}+"
-	println "|${str.center(30, ' ')}|"
-	println "+${''.center(30, '-')}+"
+	println "|${str.center(30, ' ')}|\n+${''.center(30, '-')}+\n+${''.center(30, '-')}+"
 }
 
 node {
@@ -29,16 +27,14 @@ node {
 	def dotNetPath = params.dotNetPath
 
 	def allProjectsData = []
-	def selectedProjects = Projects.tokenize(',')
+	//def selectedProjects = Projects.tokenize(',')
+	def selectedProjects = ["Server"]
 
 	for (projectName in allProjectNames) {
 		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 	}
 
-	
-	println "################"
     checkout scm
-	println "################"
     
     stage('Checkout') {
         git url: gitPath, branch: 'CICD'
