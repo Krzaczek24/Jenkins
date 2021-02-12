@@ -2,13 +2,13 @@ import groovy.json.JsonSlurper
 
 node {
 	def currentPath = pwd()
-	println "########################"
-	println currentPath
-	println "########################"
 	File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
 	def jsonText = file.getText()
 	def json = slurper.parseText(jsonText)
+	
+	println "Loaded JSON"
+	println json
 
 	def sortedProjectNames = json.projects.sort { it.order }
 	def pathTemplate = json.pathTemplates.default
