@@ -1,12 +1,21 @@
-def gitPath = 'https://github.com/Krzaczek24/BlazorApplication.git'
-def dotNetPath = '"C:\\Program Files\\dotnet\\dotnet.exe"'
-def projectPaths = '"DynamicManager\\__project__\\DynamicManager.__project__.csproj"'
-def projectNames = Projects.tokenize(',').sort()
-def projectsData = []
+import groovy.json.JsonSlurper
 
-for (projectName in projectNames) {
-	def project = projectName.tokenize('_').last()
-    projectsData.add([name: project, path: projectPaths.replace("__project__", project)])
+File file = new File('jenkinsParams.json')
+def slurper = new JsonSlurper()
+def jsonText = file.getText()
+def json = slurper.parseText(jsonText)
+
+def sortedProjectNames = json.projects.sort { it.order }
+def pathTemplate = json.pathTemplates.default
+def allProjectNames = sortedProjectNames*.name
+def gitPath = json.gitPath
+def dotNetPath = json.dotNetPath
+
+def allProjectsData = []
+def selectedProjects = Projects.tokenize(',')
+
+for (projectName in allProjectNames) {
+    projectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 }
 
 node {
@@ -36,8 +45,13 @@ node {
     
 	for (project in projectsData) {
 		stage("Build '${project.name}'") {
-			println "Building '${project.name}' project ... "
-			bat "${dotNetPath} build ${project.path} --configuration Release"
+			if (selectedProjects.contains(project)) {
+				println "Building '${project.name}' project ... "
+				bat "${dotNetPath} build ${project.path} --configuration Release"
+			}
+			else {
+				println "Skipped building '${project.name}' project"
+			}
 		}
 	}
 	
@@ -53,8 +67,13 @@ node {
 	
 	for (project in projectsData) {
 		stage("Publish '${project.name}'") {
-			println "Publishing '${project.name}' project ... "
-			bat "${dotNetPath} publish ${project.path}"
+			if (selectedProjects.contains(project)) {
+				println "Publishing '${project.name}' project ... "
+				bat "${dotNetPath} publish ${project.path}"
+			}
+			else {
+				println "Skipped publishing '${project.name}' project"
+			}
 		}
 	}
 }
