@@ -1,5 +1,5 @@
 import groovy.json.JsonSlurper
-//import groovy.json.JsonOutput
+import groovy.json.JsonOutput
 
 @NonCPS
 def getSortedProjects(projects) {
@@ -11,15 +11,16 @@ def printNiceHeader(str) {
 }
 
 node {
+	checkout scm
+
 	def currentPath = pwd()
-	//File file = new File("${currentPath}\\jenkinsParams.json")
+	File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
-	//def jsonText = file.getText()
-	def jsonText = '{"gitPath": "https://github.com/Krzaczek24/BlazorApplication.git","dotNetPath": "\\"C:\\Program Files\\dotnet\\dotnet.exe\\"","pathTemplates": {"default": "DynamicManager\\__project__\\DynamicManager.__project__.csproj"},"projects": [{"name": "Client","order": 4,"pathTemplate": "default"},{"name": "Database","order": 1,"pathTemplate": "default"},{"name": "Server","order": 3,"pathTemplate": "default"},{"name": "Shared","order": 2,"pathTemplate": "default"}]}'
+	def jsonText = file.getText()
 	def params = slurper.parseText(jsonText)
 	
 	printNiceHeader('Loaded JSON')
-	//println JsonOutput.prettyPrint(jsonText)
+	println JsonOutput.prettyPrint(jsonText)
 
 	def pathTemplate = params.pathTemplates.default
 	def sortedProjectNames = getSortedProjects(params.projects)
@@ -34,8 +35,6 @@ node {
 	for (projectName in allProjectNames) {
 		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 	}
-
-    checkout scm
     
     stage('Checkout') {
         git url: gitPath, branch: 'CICD'
