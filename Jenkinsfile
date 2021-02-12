@@ -15,18 +15,13 @@ node {
 	
 	println "Loaded JSON"
 	println JsonOutput.prettyPrint(jsonText)
+	println params
 
-	println "################"
 	def pathTemplate = params.pathTemplates.default
-	println "################"
 	def sortedProjectNames = getSortedProjects(params.projects)
-	println "################"
 	def allProjectNames = sortedProjectNames*.name
-	println "################"
 	def gitPath = params.gitPath
-	println "################"
 	def dotNetPath = params.dotNetPath
-	println "################"
 
 	def allProjectsData = []
 	def selectedProjects = Projects.tokenize(',')
@@ -35,7 +30,10 @@ node {
 		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 	}
 
+	
+	println "################"
     checkout scm
+	println "################"
     
     stage('Checkout') {
         git url: gitPath, branch: 'CICD'
