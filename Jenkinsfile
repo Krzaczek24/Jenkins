@@ -1,5 +1,5 @@
 import groovy.json.JsonSlurper
-import groovy.json.JsonOutput
+//import groovy.json.JsonOutput
 
 @NonCPS
 def getSortedProjects(projects) {
@@ -8,7 +8,7 @@ def getSortedProjects(projects) {
 
 def printNiceHeader(str) {
 	println "+${''.center(30, '-')}+"
-	println "|${''.center(30, ' ')}|"
+	println "|${str.center(30, ' ')}|"
 	println "+${''.center(30, '-')}+"
 }
 
@@ -20,7 +20,7 @@ node {
 	def params = slurper.parseText(jsonText)
 	
 	printNiceHeader('Loaded JSON')
-	println JsonOutput.prettyPrint(jsonText)
+	//println JsonOutput.prettyPrint(jsonText)
 
 	def pathTemplate = params.pathTemplates.default
 	def sortedProjectNames = getSortedProjects(params.projects)
