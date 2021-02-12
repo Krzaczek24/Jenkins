@@ -16,11 +16,17 @@ node {
 	println "Loaded JSON"
 	println JsonOutput.prettyPrint(jsonText)
 
-	def sortedProjectNames = getSortedProjects(params.projects)
+	println "################"
 	def pathTemplate = params.pathTemplates.default
+	println "################"
+	def sortedProjectNames = getSortedProjects(params.projects)
+	println "################"
 	def allProjectNames = sortedProjectNames*.name
+	println "################"
 	def gitPath = params.gitPath
+	println "################"
 	def dotNetPath = params.dotNetPath
+	println "################"
 
 	def allProjectsData = []
 	def selectedProjects = Projects.tokenize(',')
