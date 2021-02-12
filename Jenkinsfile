@@ -12,7 +12,11 @@ def printNiceHeader(str) {
 
 node {
 	checkout scm
-
+    
+    stage('Checkout') {
+        git url: gitPath, branch: 'CICD'
+    }
+	
 	def currentPath = pwd()
 	File file = new File("${currentPath}\\jenkinsParams.json")
 	def slurper = new JsonSlurper()
@@ -35,10 +39,6 @@ node {
 	for (projectName in allProjectNames) {
 		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 	}
-    
-    stage('Checkout') {
-        git url: gitPath, branch: 'CICD'
-    }
     
     stage('Restore packages') {
         if (Restore == true) {
