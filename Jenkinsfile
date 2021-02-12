@@ -38,7 +38,7 @@ node {
             }
         }
 		else {
-			println "Skipped restoring packages for all projects
+			println "Skipped restoring packages for all projects"
 		}
     }
     
