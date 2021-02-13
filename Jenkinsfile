@@ -14,6 +14,9 @@ node {
 	checkout scm
     
     stage('Checkout') {
+		println "#######################"
+		println GitRepoPath
+		println "#######################"
         git url: GitRepoPath, branch: 'CICD'
     }
 	
