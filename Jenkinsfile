@@ -7,39 +7,38 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "|${str.center(30, ' ')}|\n+${''.center(30, '-')}+\n+${''.center(30, '-')}+"
+	println "+${''.center(30, '-')}+\n|${str.center(30, ' ')}|\n+${''.center(30, '-')}+"
 }
 
 node {
+	printNiceHeader("Checkout SCM")
 	checkout scm
     
     stage('Checkout') {
-		println "#######################"
-		println GitRepoPath
-		println "#######################"
+		printNiceHeader("Checkout ${GitRepoPath}")
         git url: GitRepoPath, branch: 'CICD'
+		
+		def currentPath = pwd()
+		File file = new File("${currentPath}\\jenkinsParams.json")
+		def slurper = new JsonSlurper()
+		def jsonText = file.getText()
+		def params = slurper.parseText(jsonText)
+		
+		printNiceHeader('Loaded "jenkinsParams.json"')
+		println JsonOutput.prettyPrint(jsonText)
+
+		def pathTemplate = params.pathTemplates.default
+		def sortedProjectNames = getSortedProjects(params.projects)
+		def allProjectNames = sortedProjectNames*.name
+
+		def allProjectsData = []
+		//def selectedProjects = Projects.tokenize(',')
+		def selectedProjects = ["Server"]
+
+		for (projectName in allProjectNames) {
+			allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
+		}
     }
-	
-	def currentPath = pwd()
-	File file = new File("${currentPath}\\jenkinsParams.json")
-	def slurper = new JsonSlurper()
-	def jsonText = file.getText()
-	def params = slurper.parseText(jsonText)
-	
-	printNiceHeader('Loaded JSON')
-	println JsonOutput.prettyPrint(jsonText)
-
-	def pathTemplate = params.pathTemplates.default
-	def sortedProjectNames = getSortedProjects(params.projects)
-	def allProjectNames = sortedProjectNames*.name
-
-	def allProjectsData = []
-	//def selectedProjects = Projects.tokenize(',')
-	def selectedProjects = ["Server"]
-
-	for (projectName in allProjectNames) {
-		allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
-	}
     
     stage('Restore packages') {
         if (Restore == true) {
