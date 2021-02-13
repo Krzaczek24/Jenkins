@@ -7,7 +7,7 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "+${''.center(126, '-')}+\n|''.center(8, ' ')${str.padRight(120, ' ')}|\n+${''.center(126, '-')}+"
+	println "+${''.center(126, '-')}+\n|${''.center(8, ' ')}${str.padRight(120, ' ')}|\n+${''.center(126, '-')}+"
 }
 
 node {
@@ -40,6 +40,7 @@ node {
     }
     
     stage('Restore packages') {
+		printNiceHeader("Restore packages")
         if (Restore == true) {
             for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
@@ -57,6 +58,8 @@ node {
     }
     
     stage('Clean') {
+		printNiceHeader("Clean")
+		println Clean
         if (Clean == true) {
 	        for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
@@ -73,6 +76,7 @@ node {
 		}
     }
     
+	printNiceHeader("Build")
 	for (project in allProjectsData) {
 		stage("Build '${project.name}'") {
 			if (selectedProjects.contains(project)) {
@@ -86,15 +90,18 @@ node {
 	}
 	
     stage('Unit Test') {
+		printNiceHeader("Unit Test")
         println "No unit tests definied"
 		//bat "${DotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
     }
     
     stage('Integration Test') {
+		printNiceHeader("Integration Test")
         println "No unit tests definied"
 		//bat "${DotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
     }
 	
+	printNiceHeader("Publish")
 	for (project in allProjectsData) {
 		stage("Publish '${project.name}'") {
 			if (selectedProjects.contains(project)) {
