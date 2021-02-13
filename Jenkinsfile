@@ -48,7 +48,7 @@ node {
 		printNiceHeader("Restore packages")
         if (Restore == 'true') {
             for (project in allProjectsData) {
-				if (selectedProjects.contains(project)) {
+				if (selectedProjects.contains(project.name)) {
 					println "Restoring packages for '${project.name}' project ... "
 					bat "${DotNetPath} restore ${project.path}"
 				} else {
@@ -64,7 +64,7 @@ node {
 		printNiceHeader("Clean")
         if (Clean == 'true') {
 	        for (project in allProjectsData) {
-				if (selectedProjects.contains(project)) {
+				if (selectedProjects.contains(project.name)) {
 					println "Cleaning for '${project.name}' project ... "
 					bat "${DotNetPath} clean ${project.path}"
 				} else {
@@ -79,7 +79,7 @@ node {
 	printNiceHeader("Build")
 	for (project in allProjectsData) {
 		stage("Build '${project.name}'") {
-			if (selectedProjects.contains(project)) {
+			if (selectedProjects.contains(project.name)) {
 				println "Building '${project.name}' project ... "
 				bat "${DotNetPath} build ${project.path} --configuration Release"
 			} else {
@@ -103,7 +103,7 @@ node {
 	printNiceHeader("Publish")
 	for (project in allProjectsData) {
 		stage("Publish '${project.name}'") {
-			if (selectedProjects.contains(project)) {
+			if (selectedProjects.contains(project.name)) {
 				println "Publishing '${project.name}' project ... "
 				bat "${DotNetPath} publish ${project.path}"
 			} else {
