@@ -7,7 +7,7 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "+${''.center(126, '-')}+\n|''.center(8, ' ')${str.rightPad(120, ' ')}|\n+${''.center(126, '-')}+"
+	println "+${''.center(126, '-')}+\n|''.center(8, ' ')${str.padRight(120, ' ')}|\n+${''.center(126, '-')}+"
 }
 
 node {
