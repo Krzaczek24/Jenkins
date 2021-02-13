@@ -7,12 +7,15 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "+${''.center(30, '-')}+\n|${str.center(30, ' ')}|\n+${''.center(30, '-')}+"
+	println "+${''.center(126, '-')}+\n|''.center(8, ' ')${str.rightPad(120, ' ')}|\n+${''.center(126, '-')}+"
 }
 
 node {
 	printNiceHeader("Checkout SCM")
 	checkout scm
+	
+	def allProjectsData = []
+	def selectedProjects = Projects.tokenize(',')
     
     stage('Checkout') {
 		printNiceHeader("Checkout ${GitRepoPath}")
@@ -30,10 +33,6 @@ node {
 		def pathTemplate = params.pathTemplates.default
 		def sortedProjectNames = getSortedProjects(params.projects)
 		def allProjectNames = sortedProjectNames*.name
-
-		def allProjectsData = []
-		//def selectedProjects = Projects.tokenize(',')
-		def selectedProjects = ["Server"]
 
 		for (projectName in allProjectNames) {
 			allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
