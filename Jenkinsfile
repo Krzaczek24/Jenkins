@@ -14,7 +14,7 @@ node {
 	checkout scm
     
     stage('Checkout') {
-        git url: gitPath, branch: 'CICD'
+        git url: GitRepoPath, branch: 'CICD'
     }
 	
 	def currentPath = pwd()
@@ -29,8 +29,6 @@ node {
 	def pathTemplate = params.pathTemplates.default
 	def sortedProjectNames = getSortedProjects(params.projects)
 	def allProjectNames = sortedProjectNames*.name
-	def gitPath = params.gitPath
-	def dotNetPath = params.dotNetPath
 
 	def allProjectsData = []
 	//def selectedProjects = Projects.tokenize(',')
@@ -45,7 +43,7 @@ node {
             for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Restoring packages for '${project.name}' project ... "
-					bat "${dotNetPath} restore ${project.path}"
+					bat "${DotNetPath} restore ${project.path}"
 				}
 				else {
 					println "Skipped restoring packages for '${project.name}' project"
@@ -62,7 +60,7 @@ node {
 	        for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Cleaning for '${project.name}' project ... "
-					bat "${dotNetPath} clean ${project.path}"
+					bat "${DotNetPath} clean ${project.path}"
 				}
 				else {
 					println "Skipped cleaning '${project.name}' project"
@@ -78,7 +76,7 @@ node {
 		stage("Build '${project.name}'") {
 			if (selectedProjects.contains(project)) {
 				println "Building '${project.name}' project ... "
-				bat "${dotNetPath} build ${project.path} --configuration Release"
+				bat "${DotNetPath} build ${project.path} --configuration Release"
 			}
 			else {
 				println "Skipped building '${project.name}' project"
@@ -88,19 +86,19 @@ node {
 	
     stage('Unit Test') {
         println "No unit tests definied"
-		//bat "${dotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
+		//bat "${DotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
     }
     
     stage('Integration Test') {
         println "No unit tests definied"
-		//bat "${dotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
+		//bat "${DotNetPath} test C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\jobs\\DynamicManager\\workspace\\DynamicManager\\Test\\DynamicManager.Test.csproj"
     }
 	
 	for (project in allProjectsData) {
 		stage("Publish '${project.name}'") {
 			if (selectedProjects.contains(project)) {
 				println "Publishing '${project.name}' project ... "
-				bat "${dotNetPath} publish ${project.path}"
+				bat "${DotNetPath} publish ${project.path}"
 			}
 			else {
 				println "Skipped publishing '${project.name}' project"
