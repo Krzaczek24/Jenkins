@@ -34,9 +34,14 @@ node {
 		def sortedProjectNames = getSortedProjects(params.projects)
 		def allProjectNames = sortedProjectNames*.name
 
+		def printProjects = ''
 		for (projectName in allProjectNames) {
 			allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
+			printProjects += "${(selectedProjects.contains(projectName) ? '+' : '-')} ${projectName}\n"
 		}
+		
+		printNiceHeader("Selected projects")
+		println printProjects
     }
     
     stage('Restore packages') {
@@ -50,15 +55,13 @@ node {
 					println "Skipped restoring packages for '${project.name}' project"
 				}
             }
-        }
-		else {
+        } else {
 			println "Skipped restoring packages for all projects"
 		}
     }
     
     stage('Clean') {
 		printNiceHeader("Clean")
-		println Clean
         if (Clean == true) {
 	        for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
@@ -68,8 +71,7 @@ node {
 					println "Skipped cleaning '${project.name}' project"
 				}
             }   
-	    }
-		else {
+	    } else {
 			println "Skipped cleaning all projects"
 		}
     }
