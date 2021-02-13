@@ -41,7 +41,7 @@ node {
 		}
 		
 		printNiceHeader("Parameters")
-		println "${printProjects}ACTIONS:\${Restore ? '+' : '-'} Restore\n${Clean ? '+' : '-'} Clean"
+		println "${printProjects}ACTIONS:\n${Restore ? '+' : '-'} Restore\n${Clean ? '+' : '-'} Clean"
     }
     
     stage('Restore packages') {
