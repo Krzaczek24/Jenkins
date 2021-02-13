@@ -105,7 +105,7 @@ node {
 		stage("Publish '${project.name}'") {
 			if (selectedProjects.contains(project.name)) {
 				println "Publishing '${project.name}' project ... "
-				bat "${DotNetPath} publish ${project.path}"
+				bat "${DotNetPath} publish -c Release ${project.path}"
 			} else {
 				println "Skipped publishing '${project.name}' project"
 			}
