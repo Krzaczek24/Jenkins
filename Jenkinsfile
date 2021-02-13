@@ -7,7 +7,7 @@ def getSortedProjects(projects) {
 }
 
 def printNiceHeader(str) {
-	println "+${''.center(126, '-')}+\n|${''.center(8, ' ')}${str.padRight(120, ' ')}|\n+${''.center(126, '-')}+"
+	println "+${''.center(128, '-')}+\n|${''.center(8, ' ')}${str.padRight(120, ' ')}|\n+${''.center(128, '-')}+"
 }
 
 node {
@@ -46,8 +46,7 @@ node {
 				if (selectedProjects.contains(project)) {
 					println "Restoring packages for '${project.name}' project ... "
 					bat "${DotNetPath} restore ${project.path}"
-				}
-				else {
+				} else {
 					println "Skipped restoring packages for '${project.name}' project"
 				}
             }
@@ -65,8 +64,7 @@ node {
 				if (selectedProjects.contains(project)) {
 					println "Cleaning for '${project.name}' project ... "
 					bat "${DotNetPath} clean ${project.path}"
-				}
-				else {
+				} else {
 					println "Skipped cleaning '${project.name}' project"
 				}
             }   
@@ -82,8 +80,7 @@ node {
 			if (selectedProjects.contains(project)) {
 				println "Building '${project.name}' project ... "
 				bat "${DotNetPath} build ${project.path} --configuration Release"
-			}
-			else {
+			} else {
 				println "Skipped building '${project.name}' project"
 			}
 		}
@@ -107,8 +104,7 @@ node {
 			if (selectedProjects.contains(project)) {
 				println "Publishing '${project.name}' project ... "
 				bat "${DotNetPath} publish ${project.path}"
-			}
-			else {
+			} else {
 				println "Skipped publishing '${project.name}' project"
 			}
 		}
