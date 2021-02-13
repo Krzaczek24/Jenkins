@@ -41,12 +41,12 @@ node {
 		}
 		
 		printNiceHeader("Parameters")
-		println "${printProjects}ACTIONS:\n${Restore ? '+' : '-'} Restore\n${Clean ? '+' : '-'} Clean"
+		println "${printProjects}ACTIONS:\n${Restore == 'true' ? '+' : '-'} Restore\n${Clean == 'true' ? '+' : '-'} Clean"
     }
     
     stage('Restore packages') {
 		printNiceHeader("Restore packages")
-        if (Restore == true) {
+        if (Restore == 'true') {
             for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Restoring packages for '${project.name}' project ... "
@@ -62,7 +62,7 @@ node {
     
     stage('Clean') {
 		printNiceHeader("Clean")
-        if (Clean == true) {
+        if (Clean == 'true') {
 	        for (project in allProjectsData) {
 				if (selectedProjects.contains(project)) {
 					println "Cleaning for '${project.name}' project ... "
