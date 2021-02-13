@@ -34,14 +34,14 @@ node {
 		def sortedProjectNames = getSortedProjects(params.projects)
 		def allProjectNames = sortedProjectNames*.name
 
-		def printProjects = ''
+		def printProjects = 'PROJECTS:\n'
 		for (projectName in allProjectNames) {
 			allProjectsData.add([name: projectName, path: pathTemplate.replace("__project__", projectName)])
 			printProjects += "${(selectedProjects.contains(projectName) ? '+' : '-')} ${projectName}\n"
 		}
 		
-		printNiceHeader("Selected projects")
-		println printProjects
+		printNiceHeader("Parameters")
+		println "${printProjects}ACTIONS:\${Restore ? '+' : '-'} Restore\n${Clean ? '+' : '-'} Clean"
     }
     
     stage('Restore packages') {
